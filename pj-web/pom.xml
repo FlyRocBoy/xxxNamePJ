@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>BaseProject</artifactId>
+        <groupId>com.gp.project</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>pj-web</artifactId>
+    <packaging>war</packaging>
+    <name>pj-web</name>
+    <properties>
+        <package.target>dev</package.target>
+    </properties>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <package.target>dev</package.target>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>testA</id>
+            <properties>
+                <package.target>testA</package.target>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>testDev</id>
+            <properties>
+                <package.target>testDev</package.target>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>release</id>
+            <properties>
+                <package.target>release</package.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>releaseForDongGuan</id>
+            <properties>
+                <package.target>releaseForDongGuan</package.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>releaseTask</id>
+            <properties>
+                <package.target>releaseTask</package.target>
+            </properties>
+        </profile>
+    </profiles>
+    <dependencies>
+        <dependency>
+            <groupId>com.gp.project</groupId>
+            <artifactId>child1</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>xxxNamePJ</finalName>
+        <plugins>
+            <!-- 合并web项目。聚合项目需配置依赖。 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+
+                    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
+
+                    <!--不强制转换编码-->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>xml</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+
+                    <webResources>
+                        <!-- 按环境拷贝配置文件。结束 -->
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>profiles/${package.target}/resources/</directory>
+                            <targetPath>WEB-INF/classes/</targetPath>
+                            <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <targetPath>WEB-INF/classes</targetPath>
+                            <includes />
+                            <filtering>true</filtering>
+                        </resource>
+                        <!--<resource>
+                            <directory>../aggregator-class/src/main/resources</directory>
+                            <targetPath>WEB-INF/classes</targetPath>
+                            <includes />
+                            <filtering>true</filtering>
+                        </resource>-->
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
